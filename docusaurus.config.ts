@@ -18,7 +18,7 @@ const config: Config = {
   projectName: 'mythril-docs',
 
   onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+
 
   i18n: {
     defaultLocale: 'en',
