@@ -3,153 +3,205 @@ sidebar_position: 2
 title: Installation
 ---
 
-# Installation Guide
+# Installation
 
-This guide covers all the ways to add Mythril to your Discord server.
+Complete setup guide for Mythril.
 
-## Self-Hosted Installation
+## Requirements
 
-Mythril is open source and designed to be self-hosted on your own infrastructure.
+### Required Software
 
-### Step 1: Clone the Repository
+| Software | Version | Purpose |
+|----------|---------|---------|
+| Node.js | 18+ | Runtime for bot and API |
+| Claude Code CLI | Latest | AI execution engine |
+| Obsidian | Any | Task file management |
+| Git | Any | Clone the repo |
+
+### Required Accounts
+
+| Account | Get it at |
+|---------|-----------|
+| Discord Bot Token | [Discord Developer Portal](https://discord.com/developers/applications) |
+| Anthropic API Key | [Anthropic Console](https://console.anthropic.com) |
+
+## Install Claude Code
+
+Claude Code must be installed on the same machine running Mythril:
+
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Verify it works:
+
+```bash
+claude --version
+```
+
+Configure your API key:
+
+```bash
+claude config set api_key sk-ant-your-key
+```
+
+## Clone Mythril
 
 ```bash
 git clone https://github.com/Zarosk/mythril-bot
 cd mythril-bot
 ```
 
-### Step 2: Configure Environment
+## Configure Environment
 
 ```bash
 cp .env.example .env
 ```
 
-Edit `.env` with your settings:
-- `DISCORD_BOT_TOKEN` - Create a bot at [Discord Developer Portal](https://discord.com/developers/applications)
-- `ANTHROPIC_API_KEY` - Get from [console.anthropic.com](https://console.anthropic.com)
+Edit `.env` with your values. See [Configuration](/getting-started/configuration) for all options.
 
-### Step 3: Start the Bot
+Minimum required:
 
-Using Docker (recommended):
 ```bash
-docker-compose up -d
+DISCORD_BOT_TOKEN=your_token
+DISCORD_GUILD_ID=your_server_id
+DISCORD_COMMANDS_CHANNEL_ID=commands_channel
+DISCORD_STATUS_CHANNEL_ID=status_channel
+OBSIDIAN_VAULT_PATH=/path/to/vault
+CODE_PROJECTS_PATH=/path/to/code
+ANTHROPIC_API_KEY=sk-ant-your-key
 ```
 
-Or using Node.js:
+## Set Up Obsidian Vault
+
+Create the orchestra directory structure:
+
+```
+your-vault/
+└── _orchestra/
+    ├── queue/       # Queued tasks
+    ├── completed/   # Approved tasks
+    └── blocked/     # Rejected tasks
+    └── ACTIVE.md    # Current task (created automatically)
+```
+
+## Create Discord Bot
+
+### 1. Create Application
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Click "New Application"
+3. Name it "Mythril" (or whatever you want)
+
+### 2. Create Bot User
+
+1. Go to "Bot" in the left sidebar
+2. Click "Add Bot"
+3. Copy the token → save to `.env` as `DISCORD_BOT_TOKEN`
+
+### 3. Enable Intents
+
+Under "Privileged Gateway Intents", enable:
+- Message Content Intent
+- Server Members Intent
+
+### 4. Generate Invite URL
+
+1. Go to "OAuth2" → "URL Generator"
+2. Select scopes:
+   - `bot`
+   - `applications.commands`
+3. Select bot permissions:
+   - Send Messages
+   - Use Slash Commands
+   - Embed Links
+   - Attach Files
+   - Read Message History
+   - Create Public Threads
+   - Send Messages in Threads
+   - Add Reactions
+4. Copy the generated URL
+
+### 5. Invite to Server
+
+1. Open the URL in your browser
+2. Select your Discord server
+3. Authorize
+
+## Discord Server Setup
+
+Recommended channel structure:
+
+```
+#mythril-commands  - Send commands here
+#mythril-status    - Bot posts status updates
+#mythril-alerts    - Important notifications
+#mythril-chat      - Conversational AI mode (optional)
+```
+
+Get each channel's ID (Developer Mode → Right-click → Copy ID) and add to `.env`.
+
+## Install Dependencies
+
 ```bash
 npm install
+```
+
+## Start Mythril
+
+Development mode (with hot reload):
+
+```bash
+npm run dev:all
+```
+
+Or separately:
+
+```bash
+# Terminal 1: Brain API
+npm run dev:brain
+
+# Terminal 2: Discord Bot
+npm run dev:bot
+```
+
+Production mode:
+
+```bash
 npm run build
 npm start
 ```
 
-### Step 4: Invite to Your Server
+## Verify Installation
 
-Generate an invite URL from the Discord Developer Portal. You need **Administrator** or **Manage Server** permissions on the target server.
-
-### Step 5: Grant Permissions
-
-Review and approve the requested permissions:
-
-| Permission | Purpose |
-|------------|---------|
-| Send Messages | Respond to commands and queries |
-| Use Slash Commands | Register and handle slash commands |
-| Embed Links | Display rich, formatted responses |
-| Read Message History | Provide context-aware assistance |
-| Add Reactions | Interactive feedback options |
-| Attach Files | Share generated code files |
-
-### Step 4: Complete Authorization
-
-Click **Authorize** and complete the CAPTCHA if prompted. Mythril will appear in your server's member list.
-
-## Required Configuration
-
-After installation, you must configure Mythril before use:
-
-### 1. Set Up Your API Key
-
-Mythril requires an Anthropic API key to function:
-
-```
-/settings apikey set sk-ant-your-key-here
-```
-
-Get your API key from the [Anthropic Console](https://console.anthropic.com).
-
-### 2. Run Initial Setup
-
-Configure Mythril for your server:
-
-```
-/mythril setup
-```
-
-## Permissions Explained
-
-### Minimum Required Permissions
-
-These permissions are essential for Mythril to function:
-
-- **Send Messages** - Without this, Mythril cannot respond
-- **Use Slash Commands** - Required for command registration
-- **Embed Links** - Needed for formatted output
-
-### Recommended Permissions
-
-These enhance Mythril's capabilities:
-
-- **Read Message History** - Enables context from recent messages
-- **Add Reactions** - Allows interactive confirmations
-- **Attach Files** - Permits sharing code as files
-- **Manage Messages** - Allows cleanup of bot messages
-
-### Channel-Specific Permissions
-
-You can restrict Mythril to specific channels by configuring channel permissions in Discord:
-
-1. Go to **Channel Settings** > **Permissions**
-2. Add Mythril's role
-3. Configure allowed/denied permissions per channel
-
-## Verification
-
-Confirm Mythril is working correctly:
+In Discord, run:
 
 ```
 /mythril status
 ```
 
-You should see:
-- Bot status: Online
-- API key status: Configured
-- Permissions: All required permissions granted
+You should see the bot respond with current status.
 
-## Updating
+## Troubleshooting
 
-To update your self-hosted Mythril instance:
+### Bot not responding
+
+1. Check bot is online in Discord member list
+2. Verify `DISCORD_COMMANDS_CHANNEL_ID` matches the channel you're in
+3. Check console for errors
+
+### Claude Code not found
 
 ```bash
-git pull origin main
-docker-compose down && docker-compose up -d --build
+which claude  # Should show path
 ```
 
-Or if running with Node.js:
-```bash
-git pull origin main
-npm install
-npm run build
-npm start
-```
+If not found, reinstall Claude Code or add to PATH.
 
-## Removing Mythril
+### Permission errors
 
-To remove Mythril from your server:
+Ensure the bot role is high enough in your server's role hierarchy.
 
-1. Go to **Server Settings** > **Integrations**
-2. Find Mythril in the list
-3. Click **Manage** > **Remove**
+### Slash commands not appearing
 
-:::warning
-Removing Mythril will delete all server-specific settings. Notes and tasks stored in the bot will be retained.
-:::
+Set `REGISTER_SLASH_COMMANDS=true` in `.env` and restart. Commands take up to an hour to propagate globally.

@@ -6,44 +6,62 @@ title: Welcome to Mythril
 
 # Welcome to Mythril
 
-**Mythril** is an AI-powered Discord bot that transforms how development teams collaborate. Forge code, manage tasks, and harness AI intelligence directly within your Discord server.
+**Mythril** is a Discord bot that orchestrates Claude Code execution. Run AI coding sessions from your phone, monitor progress in real-time, and approve changes when ready.
 
-## What is Mythril?
+Self-hosted. Open source. Free forever.
 
-Mythril brings the power of Claude AI to your Discord workflow, enabling your team to:
+## What Mythril Does
 
-- **Forge Code** - Generate, refactor, and explain code using natural language
-- **Manage Tasks** - Create, track, and organize development tasks without leaving Discord
-- **Capture Notes** - Save context, decisions, and documentation on the fly
-- **Stay Informed** - Get intelligent summaries and context-aware assistance
+```
+/mythril start
+    ↓
+claude --dangerously-skip-permissions -p "task prompt"
+    ↓
+Output streams to Discord thread
+    ↓
+/mythril approve
+```
+
+You control Claude Code from Discord. The AI runs on your machine, in your codebase.
 
 ## Key Features
 
-### AI-Powered Development
-Leverage Claude's capabilities directly in Discord. Ask questions, generate code snippets, and get intelligent assistance tailored to your project context.
+### Claude Code Orchestration
+Trigger Claude Code execution from any device with Discord. No SSH, no terminal access needed.
 
-### Bring Your Own Key (BYOK)
-Use your own Anthropic API key for complete control over your AI usage and costs. Your key, your data, your control.
+### Real-time Streaming
+Watch Claude Code's output in Discord as it happens. See what files it's creating, what changes it's making.
 
 ### Task Management
-Streamlined task workflows designed for development teams. Create, assign, and track tasks with simple slash commands.
+Queue tasks in your Obsidian vault. Pick, execute, approve, or reject from Discord.
 
-### Context Awareness
-Mythril learns from your conversations and notes, providing increasingly relevant assistance over time.
+### Brain/Memory
+Persistent notes and context that follow you across sessions. Add context with `/mythril brain`.
+
+### BYOK (Bring Your Own Key)
+Use your own Anthropic API key. Your key, your data, your control.
 
 ## Quick Start
 
-Get started in minutes:
+```bash
+git clone https://github.com/Zarosk/mythril-bot
+cd mythril-bot
+cp .env.example .env
+# Edit .env with your tokens
+npm install
+npm run dev:all
+```
 
-1. Clone the repo: `git clone https://github.com/Zarosk/mythril-bot`
-2. Copy `.env.example` to `.env` and add your Anthropic API key
-3. Run `docker-compose up` to start the bot
-4. Invite the bot to your server and run `/mythril setup`
+**Prerequisites:**
+- Node.js 18+
+- [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) installed
+- Obsidian (for task management)
+- Discord Bot Token
+- Anthropic API Key
 
-Ready to dive in? Head to the [Quick Start Guide](/getting-started/quick-start).
+Ready to set up? Head to the [Installation Guide](/getting-started/installation).
 
-## Need Help?
+## Links
 
-- Join our [Discord Community](https://discord.gg/mythril) for support
-- Check out the [Commands Reference](/commands) for all available commands
-- Read about [Features](/features) to discover what Mythril can do
+- [GitHub](https://github.com/Zarosk/mythril-bot)
+- [Discord Community](https://discord.gg/kkbTmW8QF2)

@@ -5,269 +5,177 @@ title: AI Integration
 
 # AI Integration
 
-Mythril integrates Claude, Anthropic's advanced AI assistant, directly into your Discord workflow. Generate code, get explanations, debug issues, and accelerate your development process.
+How Mythril integrates with Claude.
 
-## How It Works
+## Two AI Systems
 
-When you use the `/forge` command:
+Mythril uses Claude in two distinct ways:
 
-1. Your prompt is sent to Claude via the Anthropic API
-2. Mythril includes relevant context from your notes and recent conversations
-3. Claude generates a response tailored to your needs
-4. The response is formatted and delivered in Discord
+### 1. Claude Code (Task Execution)
 
-```mermaid
-graph LR
-    A[Your Prompt] --> B[Mythril]
-    B --> C[Context Enhancement]
-    C --> D[Claude API]
-    D --> E[Formatted Response]
-    E --> F[Discord]
-```
-
-## Capabilities
-
-### Code Generation
-
-Create code from natural language descriptions:
+For running tasks via `/mythril start`:
 
 ```
-/forge Create a TypeScript class for user authentication with JWT tokens
+Discord: /mythril start
+    ↓
+Mythril Bot: Reads task from ACTIVE.md
+    ↓
+Mythril Bot: Spawns subprocess
+    ↓
+Shell: claude --dangerously-skip-permissions -p "prompt"
+    ↓
+Claude Code: Executes, creates files, makes changes
+    ↓
+Mythril Bot: Streams output to Discord thread
 ```
 
-Claude generates production-ready code with:
-- Proper typing and interfaces
-- Error handling
-- Best practices
-- Inline comments when helpful
+This runs **locally on your machine**. Claude Code has full filesystem access.
 
-### Code Explanation
+### 2. Claude API (Conversational Chat)
 
-Understand complex code:
+For messages in `#mythril-chat`:
 
 ```
-/forge Explain this regex: ^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$
+Discord: User sends message
+    ↓
+Mythril Bot: Gathers context from Brain API
+    ↓
+Mythril Bot: POST to api.anthropic.com/v1/messages
+    ↓
+Claude API: Returns response
+    ↓
+Mythril Bot: Posts response to Discord
 ```
 
-Get clear explanations that break down:
-- What each part does
-- Why it's structured that way
-- Common use cases
-- Potential edge cases
+This uses the **Anthropic HTTP API**. No local execution.
 
-### Debugging Assistance
+## Claude Code Execution Details
 
-Find and fix bugs:
+When you run `/mythril start`, here's what happens:
+
+### 1. Task Reading
+
+Bot reads `_orchestra/ACTIVE.md` and extracts:
+- Task ID and title
+- Description
+- Acceptance criteria
+
+### 2. Prompt Building
+
+Bot constructs a prompt:
 
 ```
-/forge Why does this code throw a null reference error:
-function getUser(id) {
-  return users.find(u => u.id === id).name;
+Execute task: TASK-001 - Build login page
+
+Create a login page with email/password fields.
+
+Acceptance Criteria:
+- [ ] Email input with validation
+- [ ] Password input
+- [ ] Submit button
+- [ ] Error handling
+
+Instructions:
+1. Work through each acceptance criterion
+2. Update the task file as you complete work
+3. When done, set status to PENDING_REVIEW
+```
+
+### 3. Subprocess Spawning
+
+Bot runs:
+```bash
+claude --dangerously-skip-permissions -p "prompt"
+```
+
+Using Node.js `child_process.exec` with:
+- 50MB output buffer
+- Working directory from task's `repoPath` or `CODE_PROJECTS_PATH`
+- Environment inherited from parent process
+
+### 4. Output Streaming
+
+- stdout/stderr captured via event handlers
+- Buffered for 1.5 seconds or 1500 characters
+- Posted to Discord thread in code blocks
+- Full output preserved for review
+
+### 5. Process Lifecycle
+
+- `SIGTERM` sent on `/mythril stop`
+- `SIGKILL` after 10 second grace period
+- 1 hour execution timeout (configurable)
+
+## Conversational Mode Details
+
+In `#mythril-chat`, the bot:
+
+### 1. Gathers Context
+
+Calls Brain API for:
+- Notes matching keywords in your message
+- Recent notes (last 10)
+- Active tasks
+
+### 2. Builds Request
+
+```json
+{
+  "model": "claude-sonnet-4-20250514",
+  "max_tokens": 1024,
+  "system": "You are an AI assistant with access to the user's notes and tasks...",
+  "messages": [
+    {
+      "role": "user",
+      "content": "Context from Brain:\n...\n\nUser question: ..."
+    }
+  ]
 }
 ```
 
-Claude identifies:
-- The source of the error
-- Why it occurs
-- How to fix it
-- Preventive patterns
+### 3. Handles Response
 
-### Code Review
+- Extracts text from response
+- Splits if > 2000 characters (Discord limit)
+- Posts to channel as reply
 
-Get feedback on your code:
+## BYOK Model
 
-```
-/forge Review this function for potential improvements:
-[paste your code]
-```
+Both systems use your Anthropic API key:
 
-Receive feedback on:
-- Code quality
-- Performance considerations
-- Security concerns
-- Readability improvements
+- **Claude Code**: Uses key configured in Claude Code CLI
+- **Claude API**: Uses `ANTHROPIC_API_KEY` from `.env`
 
-### Refactoring
+You pay Anthropic directly. Mythril never sees your conversations.
 
-Improve existing code:
+## Rate Limits
 
-```
-/forge Refactor this to use modern ES6+ syntax:
-[paste legacy code]
-```
+### Claude Code
+- No rate limit from Mythril (one execution at a time)
+- Subject to your Anthropic account limits
+
+### Claude API (Chat)
+- Brain API has configurable rate limits
+- Anthropic API has account-based limits
+- Bot shows warnings when approaching limits
 
 ## Model Selection
 
-Choose the right Claude model for your needs:
+### Claude Code
+Uses whatever model Claude Code defaults to. Currently Claude Sonnet 4.
 
-### Claude Sonnet 4
-
-**Best for**: Most development tasks
-
-- Balanced speed and capability
-- Excellent code generation
-- Good for daily use
-- Cost-effective
-
-```
-/settings model claude-sonnet-4-20250514
-```
-
-### Claude Opus 4
-
-**Best for**: Complex reasoning tasks
-
-- Highest capability
-- Best for architectural decisions
-- Complex debugging
-- Detailed explanations
-
-```
-/settings model claude-opus-4-20250514
-```
-
-### Claude 3.5 Haiku
-
-**Best for**: Quick queries
-
-- Fastest response time
-- Simple code generation
-- Quick explanations
-- Lowest cost
-
-```
-/settings model claude-3-5-haiku-20241022
-```
-
-## Context Enhancement
-
-Mythril automatically enhances your prompts with relevant context:
-
-### From Notes
-
-When you ask about databases, Mythril finds your database-related notes:
-
-```
-/note add tags:database We use PostgreSQL with Prisma ORM
-```
-
-Later:
-```
-/forge Write a function to create a new user in the database
-```
-
-Claude knows to use PostgreSQL and Prisma.
-
-### From Project Tags
-
-Tag notes with projects for specific context:
-
-```
-/note add project:api Our API uses REST with JSON responses
-```
-
-### From Conversation History
-
-Recent conversations in the same channel provide context for follow-up questions.
-
-## Best Practices
-
-### Be Specific
-
-Instead of:
-```
-/forge Write a function
-```
-
-Try:
-```
-/forge Write a TypeScript async function that fetches user data from an API, handles errors with try-catch, and returns a typed User object
-```
-
-### Provide Examples
-
-Include examples for better results:
-
-```
-/forge Generate a function similar to this one but for products:
-function getUser(id: string): User { ... }
-```
-
-### Iterate
-
-Start broad, then refine:
-
-1. `/forge Create a basic React form component`
-2. `/forge Add validation to this form [paste code]`
-3. `/forge Add loading states and error handling`
-
-### Use Follow-ups
-
-Reply to Mythril's responses to continue the conversation:
-
-> **Mythril**: Here's your user validation function...
->
-> **You** (replying): Now add rate limiting to this
-
-## Limitations
-
-### Token Limits
-
-Long responses may be truncated. For complex requests:
-- Break into smaller parts
-- Ask for summaries first
-- Request code in sections
-
-### Context Window
-
-Claude has a context window limit. Very long conversations may lose early context.
-
-### Code Execution
-
-Claude generates code but doesn't execute it. Always review and test generated code.
-
-### Specialized Knowledge
-
-For cutting-edge or niche technologies, provide documentation or examples in your prompt.
+### Conversational Chat
+Hardcoded to `claude-sonnet-4-20250514`. Good balance of speed and capability.
 
 ## Security Considerations
 
-### Sensitive Data
+### Claude Code
+- Has **full filesystem access** via `--dangerously-skip-permissions`
+- Can read/write/delete any file
+- Can execute commands
+- Only use with trusted code
 
-Never include in prompts:
-- API keys or secrets
-- Passwords
-- Personal identifiable information
-- Proprietary business logic you don't want shared
-
-### Code Review
-
-Always review generated code for:
-- Security vulnerabilities
-- Injection risks
-- Proper input validation
-- Safe error handling
-
-### Model Improvements
-
-Anthropic may use conversations to improve their models. Review their [privacy policy](https://www.anthropic.com/privacy) for details.
-
-## Troubleshooting
-
-### Slow Responses
-
-- Consider using a faster model (Haiku)
-- Simplify your prompt
-- Check Anthropic API status
-
-### Unexpected Results
-
-- Add more context to your prompt
-- Specify the programming language
-- Provide examples of desired output
-
-### API Errors
-
-- Verify your API key with `/settings apikey check`
-- Check your Anthropic account has credits
-- Review rate limits
+### Claude API
+- Only sends message content + context
+- No filesystem access
+- Subject to Anthropic's privacy policy

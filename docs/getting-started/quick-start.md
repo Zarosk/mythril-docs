@@ -3,133 +3,129 @@ sidebar_position: 1
 title: Quick Start
 ---
 
-# Quick Start Guide
+# Quick Start
 
-Get Mythril running in your Discord server in under 5 minutes.
+Get Mythril running in 10 minutes.
 
 ## Prerequisites
 
-Before you begin, you'll need:
+You need these installed first:
 
-- A Discord server where you have **Administrator** permissions
-- An Anthropic API key (get one at [console.anthropic.com](https://console.anthropic.com))
+| Requirement | Why |
+|-------------|-----|
+| Node.js 18+ | Runtime |
+| [Claude Code CLI](https://docs.anthropic.com/en/docs/claude-code) | The AI that does the work |
+| Obsidian | Task management |
+| Discord account | Control interface |
 
 ## Step 1: Clone and Configure
-
-Clone the Mythril repository:
 
 ```bash
 git clone https://github.com/Zarosk/mythril-bot
 cd mythril-bot
-```
-
-Copy the example environment file and configure it:
-
-```bash
 cp .env.example .env
 ```
 
-Edit `.env` and add your configuration:
-- `DISCORD_BOT_TOKEN` - Your Discord bot token
-- `ANTHROPIC_API_KEY` - Your Anthropic API key
-
-## Step 2: Start the Bot
-
-Run Mythril using Docker:
+Edit `.env`:
 
 ```bash
-docker-compose up -d
+# Required
+DISCORD_BOT_TOKEN=your_discord_bot_token
+ANTHROPIC_API_KEY=sk-ant-your-key
+
+# Discord Channel IDs
+DISCORD_GUILD_ID=your_server_id
+DISCORD_COMMANDS_CHANNEL_ID=channel_for_commands
+DISCORD_STATUS_CHANNEL_ID=channel_for_status
+
+# Paths
+OBSIDIAN_VAULT_PATH=/path/to/your/vault
+CODE_PROJECTS_PATH=/path/to/your/code
 ```
 
-Or run directly with Node.js:
+## Step 2: Set Up Obsidian Vault
+
+Create the task management structure:
+
+```
+your-vault/
+└── _orchestra/
+    ├── queue/       # Put task files here
+    ├── completed/   # Done tasks go here
+    └── blocked/     # Rejected tasks go here
+```
+
+## Step 3: Create a Discord Bot
+
+1. Go to [Discord Developer Portal](https://discord.com/developers/applications)
+2. Create New Application → name it "Mythril"
+3. Go to Bot → Create Bot
+4. Copy the token → paste in `.env` as `DISCORD_BOT_TOKEN`
+5. Enable these Intents:
+   - Message Content Intent
+   - Server Members Intent
+
+## Step 4: Invite Bot to Server
+
+1. Go to OAuth2 → URL Generator
+2. Select scopes: `bot`, `applications.commands`
+3. Select permissions: `Send Messages`, `Use Slash Commands`, `Embed Links`, `Read Message History`, `Create Public Threads`
+4. Copy URL and open in browser
+5. Select your server
+
+## Step 5: Start Mythril
 
 ```bash
 npm install
-npm run build
-npm start
+npm run dev:all
 ```
 
-## Step 3: Invite to Your Server
+This starts both the Discord bot and the Brain API.
 
-Generate an invite link from the [Discord Developer Portal](https://discord.com/developers/applications) for your bot. Required permissions:
+## Step 6: Create Your First Task
 
-- **Send Messages** - To respond to commands
-- **Use Slash Commands** - To register and handle commands
-- **Embed Links** - To display rich responses
-- **Read Message History** - For context-aware features
+Create a file in `_orchestra/queue/` called `TASK-001.md`:
 
-## Step 4: Initial Setup
+```markdown
+---
+id: TASK-001
+title: Hello World
+project: test
+status: queued
+---
 
-Once Mythril joins your server, run the setup command:
+## Description
+Create a file called hello.txt with "Hello World" inside.
 
-```
-/mythril setup
-```
-
-This wizard will guide you through:
-
-1. Selecting a channel for Mythril responses
-2. Configuring team settings
-3. Setting up optional features
-
-## Step 5: Verify Your API Key
-
-Your Anthropic API key should already be configured in your `.env` file. Verify it's working:
-
-```
-/settings apikey check
+## Acceptance Criteria
+- [ ] File created
+- [ ] Contains correct text
 ```
 
-:::tip Security
-Your API key is stored in your local `.env` file and never leaves your server.
-:::
+## Step 7: Run It
 
-## Step 6: Start Using Mythril
-
-You're ready to go! Try these commands:
-
-### Generate Code
+In Discord:
 
 ```
-/forge Generate a TypeScript function that validates email addresses
+/mythril pick TASK-001
+/mythril start
 ```
 
-### Create a Task
+Watch Claude Code execute in the thread. When done:
 
 ```
-/task create title:Implement user authentication priority:high
+/mythril approve
 ```
 
-### Save a Note
+## What Just Happened?
 
-```
-/note add We decided to use PostgreSQL for the database
-```
+1. `/mythril pick` moved your task to `ACTIVE.md`
+2. `/mythril start` spawned: `claude --dangerously-skip-permissions -p "..."`
+3. Claude Code executed, output streamed to Discord
+4. `/mythril approve` moved task to `completed/`
 
-### Get Help
+## Next Steps
 
-```
-/mythril help
-```
-
-## What's Next?
-
-- Learn about all [Commands](/commands)
-- Explore [Features](/features) in depth
-- Check out [Configuration](/getting-started/configuration) options
-
-## Troubleshooting
-
-### Mythril isn't responding
-
-1. Check that Mythril has permissions in the channel
-2. Verify your API key is set correctly with `/settings apikey check`
-3. Ensure you're using slash commands (starting with `/`)
-
-### API key errors
-
-- Make sure your API key is valid and has available credits
-- Check for typos when entering the key
-- Visit the [Anthropic Console](https://console.anthropic.com) to verify your key status
-
-Still having issues? Join our [Discord Community](https://discord.gg/mythril) for support.
+- [Full Installation Guide](/getting-started/installation) - detailed setup
+- [Configuration](/getting-started/configuration) - all environment variables
+- [Commands](/commands) - all available commands

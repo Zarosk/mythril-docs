@@ -1,125 +1,139 @@
 ---
 sidebar_position: 1
-title: Features Overview
+title: Features
 ---
 
-# Features Overview
+# Features
 
-Mythril brings powerful AI capabilities to your Discord server, designed specifically for development teams.
+What Mythril does.
 
-## Core Features
+## Claude Code Orchestration
 
-### AI-Powered Development
-
-Leverage Claude's advanced AI capabilities directly in Discord:
-
-- **Code Generation** - Create functions, components, and entire files from natural language
-- **Code Explanation** - Get detailed explanations of complex code
-- **Bug Detection** - Identify issues and get fix suggestions
-- **Refactoring** - Improve code quality with AI assistance
-
-[Learn more about AI Integration →](/features/ai-integration)
-
-### Task Management
-
-Streamlined task workflows without leaving Discord:
-
-- **Quick Creation** - Create tasks with simple slash commands
-- **Status Tracking** - Monitor progress in real-time
-- **Assignments** - Assign tasks to team members
-- **Notifications** - Get updates on task changes
-
-[Learn more about Task Management →](/features/task-management)
-
-### Context Awareness
-
-Mythril learns from your team's conversations:
-
-- **Note Integration** - Reference saved notes automatically
-- **Project Context** - Maintain per-project knowledge
-- **Decision History** - Remember architectural decisions
-- **Personalization** - Responses improve over time
-
-[Learn more about Context Awareness →](/features/context-awareness)
-
-### Bring Your Own Key (BYOK)
-
-Complete control over your AI usage:
-
-- **Your API Key** - Use your own Anthropic account
-- **Cost Control** - Manage usage and spending directly
-- **Data Privacy** - Your data stays with Anthropic
-- **No Middleman** - Direct API access
-
-[Learn more about BYOK →](/features/byok)
-
-## Quick Feature Guide
-
-### For Developers
-
-| Need | Feature | Command |
-|------|---------|---------|
-| Generate code | AI Integration | `/forge` |
-| Track work | Task Management | `/task create` |
-| Save decisions | Notes | `/note add` |
-| Set preferences | Settings | `/settings` |
-
-### For Team Leads
-
-| Need | Feature | Command |
-|------|---------|---------|
-| View team tasks | Task Management | `/task list` |
-| Review decisions | Notes | `/note search` |
-| Configure bot | Settings | `/settings` |
-
-### For Admins
-
-| Need | Feature | Command |
-|------|---------|---------|
-| Set up API key | BYOK | `/settings apikey` |
-| Configure channels | Settings | `/settings channel` |
-| Manage permissions | Settings | `/settings permissions` |
-
-## Getting Started with Features
-
-### 1. Set Up Your API Key
-
-Before using AI features, configure your Anthropic API key:
+The core feature. Trigger Claude Code execution from Discord:
 
 ```
-/settings apikey set sk-ant-xxxxx
+/mythril start
+    ↓
+claude --dangerously-skip-permissions -p "task prompt"
+    ↓
+Output streams to Discord thread
+    ↓
+/mythril approve
 ```
 
-### 2. Try Code Generation
+Why this matters:
+- Control Claude Code from your phone
+- No SSH or terminal access needed
+- Watch execution in real-time
+- Approve changes before they're final
 
-Generate your first piece of code:
+## Real-time Output Streaming
+
+Execution output appears in Discord threads as it happens:
+
+- Buffered every 1.5 seconds
+- Chunks of ~1500 characters
+- Code blocks preserved
+- Full conversation retained
+
+You see exactly what Claude Code is doing, thinking, and creating.
+
+## Task Management
+
+Tasks live in your Obsidian vault:
 
 ```
-/forge Write a function to validate email addresses
+_orchestra/
+├── queue/       # Waiting tasks
+├── ACTIVE.md    # Current task
+├── completed/   # Approved tasks
+└── blocked/     # Rejected tasks
 ```
 
-### 3. Create a Task
+Workflow:
+1. Create task file in `queue/`
+2. `/mythril pick TASK-001` to activate
+3. `/mythril start` to execute
+4. `/mythril approve` or `/mythril reject`
 
-Track your work:
+Task format:
+
+```markdown
+---
+id: TASK-001
+title: Build login page
+project: my-app
+status: queued
+---
+
+## Description
+What needs to be done.
+
+## Acceptance Criteria
+- [ ] Criterion 1
+- [ ] Criterion 2
+```
+
+## Brain/Memory
+
+Persistent storage for notes and context:
+
+- Add notes: `/mythril brain <content>`
+- Notes stored in Brain API (mythril-core)
+- Context can be retrieved by Claude
+- Syncs to Obsidian vault
+
+Use cases:
+- Project conventions
+- Technical decisions
+- Things Claude should remember
+
+## Conversational AI
+
+Chat with Claude in `#mythril-chat`:
 
 ```
-/task create title:My first task
+You: What's the status of the auth refactor?
+Mythril: Based on your recent notes and tasks...
 ```
 
-### 4. Save a Note
+How it works:
+1. You send a message in the chat channel
+2. Bot gathers context from Brain API
+3. Sends to Claude API with your question
+4. Returns contextual response
 
-Capture important information:
+This uses the Claude API directly, not Claude Code.
 
+## Mobile Control
+
+Everything works from Discord mobile:
+
+- Start/stop execution from your phone
+- Approve/reject while away from computer
+- Add notes on the go
+- Monitor progress anywhere
+
+## BYOK (Bring Your Own Key)
+
+You provide your own Anthropic API key:
+
+- Full control over usage
+- Direct billing with Anthropic
+- No middleman
+- Your data stays yours
+
+Configure in `.env`:
+```bash
+ANTHROPIC_API_KEY=sk-ant-your-key
 ```
-/note add This is my first note in Mythril
-```
 
-## Feature Requests
+## Security Model
 
-Have an idea for a new feature? We'd love to hear it:
+Important to understand:
 
-1. Join our [Discord Community](https://discord.gg/mythril)
-2. Post in the #feature-requests channel
-3. Vote on existing feature requests
-
-Popular feature requests are prioritized for development.
+- `--dangerously-skip-permissions` gives Claude Code **full access**
+- Claude Code runs on **your machine**
+- Can read/write any files Claude Code can access
+- Only run in trusted environments
+- Only use with code you're okay with AI modifying

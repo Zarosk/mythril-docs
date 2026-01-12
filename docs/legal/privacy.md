@@ -41,7 +41,7 @@ We use collected information to:
 
 ### Anthropic (Claude AI)
 
-When you use AI features (`/forge`), your prompts are sent to Anthropic's Claude API. This data is subject to [Anthropic's Privacy Policy](https://www.anthropic.com/privacy).
+When you use AI features (`/mythril start` or chat), your prompts are sent to Anthropic's Claude API. This data is subject to [Anthropic's Privacy Policy](https://www.anthropic.com/privacy).
 
 We send to Anthropic:
 - Your prompt text
@@ -80,37 +80,25 @@ Data is stored on secure servers with:
 - **Completed Tasks** - Retained 90 days, then deleted
 - **Notes** - Retained until you delete them
 - **API Keys** - Retained until you remove them
-- **Data Deletion** - Data is stored locally on your server. Delete by removing the database file or running `/settings data delete`
+- **Data Deletion** - Data is stored locally on your server. Delete by removing the database file.
 
 ## Your Rights
 
 ### Access Your Data
 
-Request a copy of your data:
-```
-/settings export
-```
+Data is stored locally on your server in the SQLite database. You can access it directly or contact us for assistance.
 
 ### Delete Your Data
 
-Delete your data:
-```
-/settings data delete
-```
-
-Or contact us at privacy@mythril.dev
+Delete your data by removing the database file or contacting us at privacy@mythril.dev
 
 ### Data Portability
 
-Export your data in JSON format:
-```
-/settings export format:json
-```
+Your data is stored in standard SQLite format and can be exported using any SQLite client.
 
 ### Opt Out
 
-- **Context Learning**: Disable with `/settings feature context disabled`
-- **Usage Analytics**: Disable with `/settings feature analytics disabled`
+All data processing is local to your self-hosted instance. You have full control over what data is collected and stored.
 
 ## Children's Privacy
 
@@ -145,7 +133,7 @@ Continued use after changes constitutes acceptance.
 For privacy-related questions or requests:
 
 - **Email**: privacy@mythril.dev
-- **Discord**: [Join our server](https://discord.gg/mythril) and contact a moderator
+- **Discord**: [Join our server](https://discord.gg/kkbTmW8QF2) and contact a moderator
 
 ## Data Processing Basis
 

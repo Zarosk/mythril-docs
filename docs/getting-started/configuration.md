@@ -3,216 +3,185 @@ sidebar_position: 3
 title: Configuration
 ---
 
-# Configuration Guide
+# Configuration
 
-Customize Mythril to fit your team's workflow.
+All configuration is via environment variables in `.env`.
 
-## API Key Configuration
+## Required Variables
 
-### Setting Your API Key
+### Discord
 
-Mythril uses a Bring Your Own Key (BYOK) model. Each server needs an Anthropic API key:
+```bash
+# Your Discord bot token
+DISCORD_BOT_TOKEN=your_bot_token_here
 
-```
-/settings apikey set sk-ant-api03-xxxxx
-```
+# Your Discord server ID
+DISCORD_GUILD_ID=123456789012345678
 
-### Checking API Key Status
+# Channel where you send commands
+DISCORD_COMMANDS_CHANNEL_ID=123456789012345678
 
-Verify your API key is configured:
-
-```
-/settings apikey check
-```
-
-Response includes:
-- Key status (valid/invalid)
-- Key prefix (for identification)
-- Last used timestamp
-
-### Removing Your API Key
-
-To remove your API key:
-
-```
-/settings apikey remove
+# Channel where bot posts status updates
+DISCORD_STATUS_CHANNEL_ID=123456789012345678
 ```
 
-:::caution
-Removing your API key will disable all AI features until a new key is set.
-:::
+### Paths
 
-## Channel Configuration
+```bash
+# Path to your Obsidian vault
+OBSIDIAN_VAULT_PATH=/Users/you/Documents/MyVault
 
-### Default Response Channel
-
-Set where Mythril sends responses by default:
-
-```
-/settings channel default #mythril-responses
+# Path to your code projects
+CODE_PROJECTS_PATH=/Users/you/code
 ```
 
-### Task Channel
+### API Keys
 
-Configure a dedicated channel for task updates:
-
-```
-/settings channel tasks #dev-tasks
-```
-
-### Notes Channel
-
-Set where notes are archived:
-
-```
-/settings channel notes #team-notes
+```bash
+# Your Anthropic API key
+ANTHROPIC_API_KEY=sk-ant-api03-xxxxx
 ```
 
-## Model Configuration
+## Optional Variables
 
-### Selecting the AI Model
+### Additional Channels
 
-Choose which Claude model to use:
+```bash
+# Channel for important alerts
+DISCORD_ALERTS_CHANNEL_ID=123456789012345678
 
-```
-/settings model claude-sonnet-4-20250514
-```
+# Channel for approval decisions
+DISCORD_DECISIONS_CHANNEL_ID=123456789012345678
 
-Available models:
-| Model | Best For |
-|-------|----------|
-| `claude-sonnet-4-20250514` | Balanced performance and cost (recommended) |
-| `claude-opus-4-20250514` | Complex reasoning tasks |
-| `claude-3-5-haiku-20241022` | Fast, lightweight responses |
-
-### Response Length
-
-Configure maximum response length:
-
-```
-/settings maxlength 4000
+# Channel for conversational AI mode
+DISCORD_CHAT_CHANNEL_ID=123456789012345678
 ```
 
-Range: 500 - 8000 characters
+### Streaming Settings
 
-## Team Settings
+```bash
+# Enable real-time output streaming (default: true)
+STREAMING_ENABLED=true
 
-### Admin Roles
+# Buffer flush interval in ms (default: 1500)
+STREAM_BUFFER_MS=1500
 
-Designate roles that can modify Mythril settings:
-
-```
-/settings admins add @Developers
-```
-
-### User Restrictions
-
-Limit who can use Mythril commands:
-
-```
-/settings allow role @Team
+# Force flush at this many characters (default: 1500)
+STREAM_MAX_CHARS=1500
 ```
 
-Or restrict specific commands:
+### Command Settings
 
-```
-/settings restrict command forge role @Developers
-```
+```bash
+# Auto-register slash commands on startup (default: true)
+REGISTER_SLASH_COMMANDS=true
 
-## Feature Toggles
-
-Enable or disable specific features:
-
-### Context Learning
-
-```
-/settings feature context enabled
+# Show deprecation warnings for !prefix commands (default: true)
+DEPRECATE_PREFIX_COMMANDS=true
 ```
 
-When enabled, Mythril learns from conversations to provide better responses.
+### Brain API
 
-### Task Notifications
+```bash
+# Brain API URL (default: http://localhost:3000)
+BRAIN_API_URL=http://localhost:3000
 
-```
-/settings feature notifications enabled
-```
-
-Get notified about task updates and deadlines.
-
-### Auto-Archive Notes
-
-```
-/settings feature autoarchive enabled
+# Brain API key (generated with npm run generate-key)
+BRAIN_API_KEY=oads_live_xxxxx
 ```
 
-Automatically archive notes older than 30 days.
+### Execution Limits
 
-## Viewing Current Configuration
+```bash
+# Graceful stop timeout in ms (default: 10000)
+GRACEFUL_STOP_TIMEOUT_MS=10000
 
-See all current settings:
-
-```
-/settings view
-```
-
-Or view a specific category:
-
-```
-/settings view channels
-/settings view permissions
-/settings view features
+# Maximum execution time in ms (default: 3600000 = 1 hour)
+EXECUTION_TIMEOUT_MS=3600000
 ```
 
-## Resetting Configuration
+### Claude Code
 
-Reset all settings to defaults:
-
-```
-/settings reset
-```
-
-:::danger
-This action cannot be undone. All custom configuration will be lost.
-:::
-
-## Configuration Export/Import
-
-### Export Settings
-
-Save your configuration:
-
-```
-/settings export
+```bash
+# Path to Claude Code executable (default: claude)
+CLAUDE_CODE_PATH=claude
 ```
 
-Mythril will DM you a configuration file.
+## Example .env
 
-### Import Settings
+```bash
+# Discord
+DISCORD_BOT_TOKEN=your_bot_token_here
+DISCORD_GUILD_ID=123456789012345678
+DISCORD_COMMANDS_CHANNEL_ID=123456789012345678
+DISCORD_STATUS_CHANNEL_ID=123456789012345678
+DISCORD_ALERTS_CHANNEL_ID=123456789012345678
+DISCORD_CHAT_CHANNEL_ID=123456789012345678
 
-Restore from a previous export:
+# Paths
+OBSIDIAN_VAULT_PATH=/Users/alex/Documents/Obsidian/MyVault
+CODE_PROJECTS_PATH=/Users/alex/code
 
+# API Keys
+ANTHROPIC_API_KEY=sk-ant-api03-xxxxxxxxxxxxxxxxxxxx
+
+# Brain API
+BRAIN_API_URL=http://localhost:3000
+BRAIN_API_KEY=oads_live_xxxxxxxxxxxx
+
+# Settings
+STREAMING_ENABLED=true
+REGISTER_SLASH_COMMANDS=true
 ```
-/settings import
+
+## Getting Channel IDs
+
+1. Enable Developer Mode in Discord:
+   - User Settings → App Settings → Advanced → Developer Mode
+2. Right-click any channel
+3. Click "Copy Channel ID"
+
+## Getting Server ID
+
+1. Enable Developer Mode (see above)
+2. Right-click your server name
+3. Click "Copy Server ID"
+
+## Security Notes
+
+- Never commit `.env` to git (it's in `.gitignore`)
+- Keep your API keys secret
+- The `--dangerously-skip-permissions` flag gives Claude Code full access
+- Only run Mythril in environments you trust
+
+## Task File Format
+
+Tasks in `_orchestra/queue/` use this format:
+
+```markdown
+---
+id: TASK-001
+title: Build login page
+project: my-app
+status: queued
+---
+
+## Description
+Create a login page with email/password fields.
+
+## Acceptance Criteria
+- [ ] Email input with validation
+- [ ] Password input
+- [ ] Submit button
+- [ ] Error handling
 ```
 
-Then upload your configuration file when prompted.
+The `repoPath` field in frontmatter can override `CODE_PROJECTS_PATH` for specific tasks:
 
-## Best Practices
-
-### Security
-
-- Never share your API key publicly
-- Use role-based access for sensitive commands
-- Regularly rotate your API key
-
-### Performance
-
-- Use `claude-3-5-haiku-20241022` for simple queries
-- Reserve `claude-opus-4-20250514` for complex tasks
-- Set appropriate max lengths to control costs
-
-### Organization
-
-- Use dedicated channels for different functions
-- Configure admin roles appropriately
-- Document your configuration for team members
+```yaml
+---
+id: TASK-002
+title: Fix bug in other project
+repoPath: /Users/alex/code/other-project
+---
+```
