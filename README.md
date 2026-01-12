@@ -1,6 +1,6 @@
 # Mythril Documentation
 
-Documentation for Mythril. Built with Docusaurus.
+Documentation site for Mythril. Built with Docusaurus.
 
 **Live:** https://mythril-docs.vercel.app
 
@@ -16,11 +16,6 @@ npm run start
 ```bash
 npm run build
 ```
-
-## Links
-
-- [Main Bot](https://github.com/Zarosk/mythril-bot)
-- [Website](https://mythril-web.vercel.app)
 
 ## License
 
