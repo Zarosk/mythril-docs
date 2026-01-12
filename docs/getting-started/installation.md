@@ -14,7 +14,7 @@ Mythril is open source and designed to be self-hosted on your own infrastructure
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/mythril-dev/mythril-bot
+git clone https://github.com/Zarosk/mythril-bot
 cd mythril-bot
 ```
 

@@ -35,7 +35,7 @@ Mythril learns from your conversations and notes, providing increasingly relevan
 
 Get started in minutes:
 
-1. Clone the repo: `git clone https://github.com/mythril-dev/mythril-bot`
+1. Clone the repo: `git clone https://github.com/Zarosk/mythril-bot`
 2. Copy `.env.example` to `.env` and add your Anthropic API key
 3. Run `docker-compose up` to start the bot
 4. Invite the bot to your server and run `/mythril setup`

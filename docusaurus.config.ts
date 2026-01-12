@@ -66,7 +66,7 @@ const config: Config = {
           position: 'right',
         },
         {
-          href: 'https://github.com/mythril-dev/mythril-bot',
+          href: 'https://github.com/Zarosk/mythril-bot',
           label: 'GitHub',
           position: 'right',
         },
@@ -101,7 +101,7 @@ const config: Config = {
             },
             {
               label: 'GitHub',
-              href: 'https://github.com/mythril-dev/mythril-bot',
+              href: 'https://github.com/Zarosk/mythril-bot',
             },
           ],
         },

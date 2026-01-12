@@ -19,7 +19,7 @@ Before you begin, you'll need:
 Clone the Mythril repository:
 
 ```bash
-git clone https://github.com/mythril-dev/mythril-bot
+git clone https://github.com/Zarosk/mythril-bot
 cd mythril-bot
 ```
 
