@@ -14,20 +14,51 @@ Before you begin, you'll need:
 - A Discord server where you have **Administrator** permissions
 - An Anthropic API key (get one at [console.anthropic.com](https://console.anthropic.com))
 
-## Step 1: Invite Mythril
+## Step 1: Clone and Configure
 
-Click the invite link below to add Mythril to your server:
+Clone the Mythril repository:
 
-[**Invite Mythril to Discord**](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID)
+```bash
+git clone https://github.com/mythril-dev/mythril-bot
+cd mythril-bot
+```
 
-Select your server and grant the requested permissions. Mythril needs these permissions to function:
+Copy the example environment file and configure it:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env` and add your configuration:
+- `DISCORD_BOT_TOKEN` - Your Discord bot token
+- `ANTHROPIC_API_KEY` - Your Anthropic API key
+
+## Step 2: Start the Bot
+
+Run Mythril using Docker:
+
+```bash
+docker-compose up -d
+```
+
+Or run directly with Node.js:
+
+```bash
+npm install
+npm run build
+npm start
+```
+
+## Step 3: Invite to Your Server
+
+Generate an invite link from the [Discord Developer Portal](https://discord.com/developers/applications) for your bot. Required permissions:
 
 - **Send Messages** - To respond to commands
 - **Use Slash Commands** - To register and handle commands
 - **Embed Links** - To display rich responses
 - **Read Message History** - For context-aware features
 
-## Step 2: Initial Setup
+## Step 4: Initial Setup
 
 Once Mythril joins your server, run the setup command:
 
@@ -41,19 +72,19 @@ This wizard will guide you through:
 2. Configuring team settings
 3. Setting up optional features
 
-## Step 3: Configure Your API Key
+## Step 5: Verify Your API Key
 
-Mythril uses a Bring Your Own Key (BYOK) model. Add your Anthropic API key:
+Your Anthropic API key should already be configured in your `.env` file. Verify it's working:
 
 ```
-/settings apikey set sk-ant-xxxxx
+/settings apikey check
 ```
 
 :::tip Security
-Your API key is encrypted and stored securely. It is never logged or shared.
+Your API key is stored in your local `.env` file and never leaves your server.
 :::
 
-## Step 4: Start Using Mythril
+## Step 6: Start Using Mythril
 
 You're ready to go! Try these commands:
 

@@ -80,7 +80,7 @@ Data is stored on secure servers with:
 - **Completed Tasks** - Retained 90 days, then deleted
 - **Notes** - Retained until you delete them
 - **API Keys** - Retained until you remove them
-- **Account Deletion** - All data deleted within 30 days of request
+- **Data Deletion** - Data is stored locally on your server. Delete by removing the database file or running `/settings data delete`
 
 ## Your Rights
 

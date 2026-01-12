@@ -53,16 +53,6 @@ Complete control over your AI usage:
 
 [Learn more about BYOK →](/features/byok)
 
-## Feature Comparison
-
-| Feature | Free | Pro |
-|---------|------|-----|
-| AI Code Generation | Limited | Unlimited |
-| Task Management | 10 tasks | Unlimited |
-| Notes | 50 notes | Unlimited |
-| Context Learning | Basic | Advanced |
-| Priority Support | - | Included |
-
 ## Quick Feature Guide
 
 ### For Developers

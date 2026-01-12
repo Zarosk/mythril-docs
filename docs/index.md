@@ -35,10 +35,10 @@ Mythril learns from your conversations and notes, providing increasingly relevan
 
 Get started in minutes:
 
-1. [Invite Mythril](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID) to your server
-2. Run `/mythril setup` to configure your channels
-3. Add your API key with `/settings apikey`
-4. Start forging with `/forge`
+1. Clone the repo: `git clone https://github.com/mythril-dev/mythril-bot`
+2. Copy `.env.example` to `.env` and add your Anthropic API key
+3. Run `docker-compose up` to start the bot
+4. Invite the bot to your server and run `/mythril setup`
 
 Ready to dive in? Head to the [Quick Start Guide](/getting-started/quick-start).
 

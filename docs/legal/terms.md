@@ -22,24 +22,39 @@ Mythril is an AI-powered Discord bot that provides:
 - Note-taking and context storage
 - Integration with Anthropic's API
 
-## 3. Account Requirements
+## 3. Self-Hosting Requirements
 
-### 3.1 Discord Account
+### 3.1 Open Source License
 
-You must have a valid Discord account to use Mythril. Your use of Discord is subject to Discord's Terms of Service.
+Mythril is released under the MIT License. You may:
 
-### 3.2 API Key Requirement
+- Use, copy, modify, and distribute the software
+- Use it for personal or commercial purposes
+- Sublicense and sell copies
 
-AI features require an Anthropic API key. You are responsible for:
+You must:
+- Include the original copyright notice
+- Include the license text in distributions
 
-- Obtaining your own API key from Anthropic
-- Complying with Anthropic's Terms of Service
-- All charges incurred through your API key
-- Keeping your API key secure
+### 3.2 Self-Hosting Responsibilities
 
-### 3.3 Server Permissions
+When self-hosting Mythril, you are responsible for:
 
-To add Mythril to a server, you must have appropriate Discord permissions (Administrator or Manage Server).
+- Maintaining your own server infrastructure
+- Securing your deployment and data
+- Keeping your instance updated
+- Managing your own Discord bot application
+- Complying with Discord's Terms of Service
+- Obtaining and securing your Anthropic API key
+- All API usage costs incurred through your key
+
+### 3.3 Discord Account
+
+You must have a valid Discord account and create your own Discord bot application at the Discord Developer Portal.
+
+### 3.4 API Key Requirement
+
+AI features require an Anthropic API key stored in your server's environment configuration.
 
 ## 4. Acceptable Use
 

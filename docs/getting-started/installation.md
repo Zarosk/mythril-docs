@@ -7,21 +7,46 @@ title: Installation
 
 This guide covers all the ways to add Mythril to your Discord server.
 
-## Discord Bot Invitation
+## Self-Hosted Installation
 
-The easiest way to use Mythril is through our hosted bot.
+Mythril is open source and designed to be self-hosted on your own infrastructure.
 
-### Step 1: Authorize the Bot
+### Step 1: Clone the Repository
 
-Click the button below to invite Mythril:
+```bash
+git clone https://github.com/mythril-dev/mythril-bot
+cd mythril-bot
+```
 
-[**Invite Mythril**](https://discord.com/oauth2/authorize?client_id=YOUR_CLIENT_ID)
+### Step 2: Configure Environment
 
-### Step 2: Select Your Server
+```bash
+cp .env.example .env
+```
 
-From the dropdown menu, select the server where you want to add Mythril. You need **Administrator** or **Manage Server** permissions.
+Edit `.env` with your settings:
+- `DISCORD_BOT_TOKEN` - Create a bot at [Discord Developer Portal](https://discord.com/developers/applications)
+- `ANTHROPIC_API_KEY` - Get from [console.anthropic.com](https://console.anthropic.com)
 
-### Step 3: Grant Permissions
+### Step 3: Start the Bot
+
+Using Docker (recommended):
+```bash
+docker-compose up -d
+```
+
+Or using Node.js:
+```bash
+npm install
+npm run build
+npm start
+```
+
+### Step 4: Invite to Your Server
+
+Generate an invite URL from the Discord Developer Portal. You need **Administrator** or **Manage Server** permissions on the target server.
+
+### Step 5: Grant Permissions
 
 Review and approve the requested permissions:
 
@@ -102,7 +127,20 @@ You should see:
 
 ## Updating
 
-The hosted Mythril bot updates automatically. No action is required on your part.
+To update your self-hosted Mythril instance:
+
+```bash
+git pull origin main
+docker-compose down && docker-compose up -d --build
+```
+
+Or if running with Node.js:
+```bash
+git pull origin main
+npm install
+npm run build
+npm start
+```
 
 ## Removing Mythril
 

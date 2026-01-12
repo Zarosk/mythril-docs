@@ -139,7 +139,7 @@ You can use one API key for multiple Discord servers:
 
 **Pros:**
 - Simpler management
-- Consolidated billing
+- Single billing account
 
 **Cons:**
 - Shared rate limits
@@ -156,7 +156,6 @@ Use separate keys for different servers:
 
 **Cons:**
 - More keys to manage
-- Multiple billing views
 
 ## API Key Management
 
