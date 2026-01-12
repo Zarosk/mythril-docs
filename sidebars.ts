@@ -19,10 +19,6 @@ const sidebars: SidebarsConfig = {
       collapsed: false,
       items: [
         'commands/index',
-        'commands/forge',
-        'commands/task',
-        'commands/note',
-        'commands/settings',
       ],
     },
     {
@@ -32,9 +28,6 @@ const sidebars: SidebarsConfig = {
       items: [
         'features/index',
         'features/ai-integration',
-        'features/task-management',
-        'features/context-awareness',
-        'features/byok',
       ],
     },
     {
