@@ -233,7 +233,7 @@ Any disputes will be resolved through binding arbitration, except where prohibit
 For questions about these Terms:
 
 - **Email**: legal@mythril.dev
-- **Discord**: [Join our server](https://discord.gg/kkbTmW8QF2)
+- **Discord**: [Join our server](https://discord.gg/5DhmG2uvBp)
 
 ## 15. Acknowledgment
 

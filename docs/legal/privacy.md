@@ -133,7 +133,7 @@ Continued use after changes constitutes acceptance.
 For privacy-related questions or requests:
 
 - **Email**: privacy@mythril.dev
-- **Discord**: [Join our server](https://discord.gg/kkbTmW8QF2) and contact a moderator
+- **Discord**: [Join our server](https://discord.gg/5DhmG2uvBp) and contact a moderator
 
 ## Data Processing Basis
 

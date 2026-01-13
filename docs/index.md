@@ -64,4 +64,4 @@ Ready to set up? Head to the [Installation Guide](/getting-started/installation)
 ## Links
 
 - [GitHub](https://github.com/Zarosk/mythril-bot)
-- [Discord Community](https://discord.gg/kkbTmW8QF2)
+- [Discord Community](https://discord.gg/5DhmG2uvBp)
